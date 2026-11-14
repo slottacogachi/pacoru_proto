@@ -683,7 +683,12 @@ button{font-family:inherit;font-size:inherit;cursor:pointer}
 .stage{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px 16px}
 .phone{width:390px;max-width:100%;height:800px;max-height:calc(100vh - 40px);background:var(--bg);border-radius:36px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.35)}
 @media (max-width:430px){.stage{padding:0}.phone{height:100vh;height:100dvh;max-height:none;border-radius:0}}
+@media (max-height:720px){.av.pulse{width:96px!important;height:96px!important;font-size:38px!important}.clock{font-size:32px}}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.screen.center{overflow:auto;padding-top:clamp(36px,7vh,80px)!important;padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
+.screen.center>*{flex-shrink:0}
+.spacer{flex:1;min-height:20px}
+.ctrls{margin-top:auto;padding-top:16px}
 .screen[hidden]{display:none!important}
 .nav{height:56px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;background:var(--card);border-bottom:1px solid var(--line);flex-shrink:0;position:relative;z-index:5}
 .nav .title{font-size:17px;font-weight:700}
@@ -720,10 +725,11 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
 #map{position:absolute;inset:56px 0 0 0;z-index:1}
 .leaflet-container{font-family:inherit;background:#E9E9EE}
 .osm-dark{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9)}
-.pin{background:var(--card);border:2px solid var(--green);border-radius:20px;height:36px;padding:0 10px 0 4px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.6);color:var(--fg)}
-.pin b{width:26px;height:26px;border-radius:13px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
-.pin.off{border-color:#4B5366;color:#6B7383}.pin.off b{background:#4B5366}
-.pin.sel{border-color:var(--yellow)}
+.pin{width:96px;display:flex;flex-direction:column;align-items:center;gap:4px;white-space:nowrap}
+.pin b{width:48px;height:48px;border-radius:24px;background:var(--green);color:#fff;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.pin span{font-size:12px;font-weight:700;color:#fff;background:rgba(15,17,21,.85);padding:3px 8px;border-radius:8px}
+.pin.off b{background:#9A9AA0}.pin.off span{background:rgba(15,17,21,.5)}
+.pin.sel b{border-color:var(--yellow);box-shadow:0 0 0 3px var(--yellow)}
 .me{width:16px;height:16px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue)}
 .mapfoot{position:absolute;left:12px;right:12px;bottom:16px;z-index:2;display:flex;flex-direction:column;gap:8px}
 .mapfoot .card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.5);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
@@ -812,7 +818,7 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
   <div style="margin-top:24px;font-size:20px;font-weight:700">誰かを探しています…</div>
   <p class="p" style="margin-top:8px">ランダムモードの人どうしが繋がります。<br>場所は関係ありません。</p>
   <div class="note" style="text-align:left">相手に見えるのは、ニックネーム・年代・性別（任意）だけ。あなたの場所や距離は出ません。</div>
-  <div style="flex:1"></div>
+  <div class="spacer"></div>
   <div style="font-size:12px;color:var(--muted);margin-bottom:12px" id="randHint">待機 <span id="randClock">00:00</span></div>
   <button class="btn gray" onclick="go('map')">やめる</button>
 </section>
@@ -824,7 +830,7 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
   <div style="margin-top:16px;font-size:26px;font-weight:700" id="cName"></div>
   <div style="margin-top:6px;font-size:14px;color:var(--muted)" id="cSub"></div>
   <p class="p" style="margin-top:24px">相手が出るかどうかは相手次第。<br>出なくても相手に通知は残りません。</p>
-  <div style="flex:1"></div>
+  <div class="spacer"></div>
   <div style="font-size:12px;color:var(--muted);margin-bottom:12px" id="callingHint">相手が出るまで待っています…</div>
   <button class="round red" onclick="cancelCall()" aria-label="やめる">✕</button>
   <div style="margin-top:8px;font-size:12px;color:var(--muted)">やめる</div>
@@ -838,8 +844,8 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
   <div style="margin-top:6px;font-size:14px;color:var(--muted)" id="inSub"></div>
   <div class="list" style="margin-top:24px;width:100%;text-align:left"><div class="item" style="justify-content:space-between"><span class="s">あなたとの通話</span><span>はじめて</span></div><div class="item" style="justify-content:space-between"><span class="s">ほかの人からの評価</span><span style="color:var(--green-d);font-weight:600">良好</span></div></div>
   <p class="p" style="margin-top:16px">出なくても相手には伝わりません。</p>
-  <div style="flex:1"></div>
-  <div style="display:flex;gap:56px">
+  <div class="spacer"></div>
+  <div class="ctrls" style="display:flex;gap:56px">
     <div class="center" style="gap:8px"><button class="round red" onclick="go('map')" aria-label="出ない">✕</button><span style="font-size:12px;color:var(--muted)">出ない</span></div>
     <div class="center" style="gap:8px"><button class="round green" onclick="answerCall()" aria-label="出る">☎</button><span style="font-size:12px">出る</span></div>
   </div>
@@ -854,9 +860,9 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
   <div style="margin-top:14px;font-size:24px;font-weight:700" id="icName"></div>
   <div style="margin-top:4px;font-size:14px;color:var(--muted)" id="icSub"></div>
   <div class="bars" id="bars" style="margin-top:20px" aria-hidden="true"></div>
-  <div class="list" style="margin-top:20px;width:100%;text-align:left"><div class="item"><div style="flex:1"><div class="t" id="phTitle" style="font-size:15px"></div><div class="s" id="phSub"></div></div><button class="btn" id="phBtn" style="width:auto;height:36px;font-size:13px;padding:0 14px;border-radius:18px" onclick="togglePhoto()"></button></div></div>
-  <div style="flex:1"></div>
-  <div style="display:flex;gap:28px;align-items:flex-start">
+  <div class="list" style="margin-top:16px;width:100%;text-align:left"><div class="item" style="padding:10px 14px"><div style="flex:1"><div class="t" id="phTitle" style="font-size:15px"></div><div class="s" id="phSub"></div></div><button class="btn" id="phBtn" style="width:auto;height:36px;font-size:13px;padding:0 14px;border-radius:18px" onclick="togglePhoto()"></button></div></div>
+  <div class="spacer"></div>
+  <div class="ctrls" style="display:flex;gap:28px;align-items:flex-start">
     <div class="center" style="gap:8px"><button class="round gray" id="muteBtn" onclick="toggleMute()" aria-label="ミュート">🎙</button><span style="font-size:11px;color:var(--muted)" id="muteLbl">ミュート</span></div>
     <div class="center" style="gap:8px"><button class="round red" onclick="endCall()" aria-label="終了">✕</button><span style="font-size:11px;color:var(--muted)">終了</span></div>
     <div class="center" style="gap:8px"><button class="round gray" id="spkBtn" onclick="toggleSpk()" aria-label="スピーカー">🔊</button><span style="font-size:11px;color:var(--muted)">スピーカー</span></div>
@@ -868,7 +874,7 @@ input[type=text]{height:48px;border-radius:10px;border:1px solid var(--line);bac
   <div class="nav"><span class="title">通話が終わりました</span><span class="sub" id="rtDur"></span></div>
   <div class="pad" style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px;padding-top:16px">
     <div class="list"><div class="item"><div class="av" style="width:48px;height:48px;font-size:18px" id="rtIni"></div><div><div class="t" id="rtName"></div><div class="s" id="rtSub"></div></div></div></div>
-    <div class="h" style="margin:10px 0 0">どうでしたか？</div>
+    <div class="h" style="margin:4px 0 0;font-size:18px">どうでしたか？</div>
     <p class="p" style="margin:0">相手には伝わりません。次に誰を見つけやすくするかに使います。</p>
     <div class="list">
       <button class="item" id="rg" onclick="rate('good')"><span style="font-size:22px">😊</span><div><div class="t">また話したい</div><div class="s">この人には制限なしで掛け直せます</div></div><span class="chk" id="rgc"></span></button>
@@ -960,7 +966,7 @@ function renderMap(){
   if(!map)return;
   const total=PLACES.reduce((n,p)=>n+p.people.filter(x=>x.online).length,0);$('onlineCount').textContent=total+'人';
   PLACES.forEach(p=>{const on=p.people.filter(x=>x.online).length;
-    markers[p.id].setIcon(L.divIcon({className:'',html:`<div class="pin ${on?'':'off'} ${S.sheet===p.id?'sel':''}"><b>${p.people.length}</b>${p.short}</div>`,iconSize:null,iconAnchor:[18,18]}));});
+    markers[p.id].setIcon(L.divIcon({className:'',html:`<div class="pin ${on?'':'off'} ${S.sheet===p.id?'sel':''}"><b>${p.people.length}</b><span>${p.short}</span></div>`,iconSize:[96,76],iconAnchor:[48,24]}));});
   meMarker.setLatLng([myPlace().lat,myPlace().lng]);
   $('tg').classList.toggle('on',S.online);$('tgl').textContent=S.online?'受付中':'受付停止';
 }
